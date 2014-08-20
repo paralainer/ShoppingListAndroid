@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".ShoppingList$PlaceholderFragment">
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shoppingListView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/add_to_list_panel_height" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/add_to_list_panel_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/addToListText"
+            android:textSize="@dimen/add_to_list_text_size"
+            android:layout_marginRight="@dimen/add_to_list_panel_height"
+            android:layout_marginEnd="@dimen/add_to_list_panel_height"
+            android:inputType="text"/>
+        <ImageButton
+            android:layout_width="@dimen/add_to_list_panel_height"
+            android:layout_height="match_parent"
+            android:id="@+id/addToListButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@android:drawable/ic_input_add"
+            android:contentDescription="@string/add_to_shopping_list" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
