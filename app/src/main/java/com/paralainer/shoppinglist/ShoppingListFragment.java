@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -38,6 +37,19 @@ public class ShoppingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
+        initAddToListButton(rootView);
+
+        initAddToListEditor(rootView);
+
+        restoreShoppingList();
+
+        initListAdapter(rootView);
+
+        return rootView;
+    }
+
+    private void initAddToListButton(View rootView) {
         ImageButton button = (ImageButton) rootView.findViewById(R.id.addToListButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +57,9 @@ public class ShoppingListFragment extends Fragment {
                 addToShoppingList();
             }
         });
+    }
 
+    private void initAddToListEditor(View rootView) {
         addToListText = (EditText) rootView.findViewById(R.id.addToListText);
         addToListText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -57,13 +71,17 @@ public class ShoppingListFragment extends Fragment {
                 return false;
             }
         });
+    }
 
-        restoreShoppingList();
-
-        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), R.layout.shopping_list_element, shoppingList);
+    private void initListAdapter(final View rootView) {
+        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), R.layout.shopping_list_element, shoppingList){
+            @Override
+            public void onDeleteItemClick(int position, View itemView) {
+                removeFromShoppingList(position);
+            }
+        };
         ListView shoppingListView = (ListView) rootView.findViewById(R.id.shoppingListView);
         shoppingListView.setAdapter(shoppingListAdapter);
-        return rootView;
     }
 
     private void restoreShoppingList() {
@@ -74,6 +92,12 @@ public class ShoppingListFragment extends Fragment {
         if (shoppingList == null) {
             shoppingList = new ArrayList<ShoppingItem>();
         }
+    }
+
+    private void removeFromShoppingList(int position){
+        shoppingListAdapter.remove(shoppingListAdapter.getItem(position));
+
+        KeyValueStorage.putPropertyAsync(getActivity(), SHOPPING_LIST, new ShoppingListHolder(shoppingList));
     }
 
     public void addToShoppingList() {
