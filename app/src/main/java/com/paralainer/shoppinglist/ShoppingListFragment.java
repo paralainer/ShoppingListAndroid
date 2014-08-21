@@ -2,17 +2,20 @@ package com.paralainer.shoppinglist;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.paralainer.shoppinglist.listadapter.ShoppingListAdapter;
+import com.paralainer.shoppinglist.swipedismiss.SwipeDismissListViewTouchListener;
+import com.paralainer.shoppinglist.util.FontHelper;
 import com.paralainer.shoppinglist.util.KeyValueStorage;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +28,7 @@ import java.util.ArrayList;
  */
 public class ShoppingListFragment extends Fragment {
 
-    public static final String SHOPPING_LIST = "shoppingList";
+    public static final String SHOPPING_LIST_CACHE_ITEM = "shoppingList";
     private EditText addToListText;
     private ShoppingListAdapter shoppingListAdapter;
     private ArrayList<ShoppingItem> shoppingList = new ArrayList<ShoppingItem>();
@@ -50,7 +53,8 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void initAddToListButton(View rootView) {
-        ImageButton button = (ImageButton) rootView.findViewById(R.id.addToListButton);
+        Button button = (Button)rootView.findViewById(R.id.addToListButton);
+        FontHelper.setFontAwesome(button, rootView.getContext());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,30 +78,49 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void initListAdapter(final View rootView) {
-        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), R.layout.shopping_list_element, shoppingList){
-            @Override
-            public void onDeleteItemClick(int position, View itemView) {
-                removeFromShoppingList(position);
-            }
-        };
+        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), R.layout.shopping_list_element, shoppingList);
         ListView shoppingListView = (ListView) rootView.findViewById(R.id.shoppingListView);
         shoppingListView.setAdapter(shoppingListAdapter);
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        shoppingListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    removeFromShoppingList(shoppingListAdapter.getItem(position));
+                                }
+                            }
+                        });
+        shoppingListView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        shoppingListView.setOnScrollListener(touchListener.makeScrollListener());
     }
 
     private void restoreShoppingList() {
-        //noinspection unchecked
-        ShoppingListHolder holder = KeyValueStorage.getProperty(getActivity(), SHOPPING_LIST, ShoppingListHolder.class);
-        shoppingList = holder == null ? null : holder.getShoppingList();
+        try {
+            //noinspection unchecked
+            ShoppingListHolder holder = KeyValueStorage.getProperty(getActivity(), SHOPPING_LIST_CACHE_ITEM, ShoppingListHolder.class);
+            shoppingList = holder == null ? null : holder.getShoppingList();
+        }catch (Exception e){
+            Log.w("Can't restore shopping list", e);
+        }
 
         if (shoppingList == null) {
             shoppingList = new ArrayList<ShoppingItem>();
         }
     }
 
-    private void removeFromShoppingList(int position){
-        shoppingListAdapter.remove(shoppingListAdapter.getItem(position));
+    private void removeFromShoppingList(ShoppingItem item){
+        shoppingListAdapter.remove(item);
 
-        KeyValueStorage.putPropertyAsync(getActivity(), SHOPPING_LIST, new ShoppingListHolder(shoppingList));
+        KeyValueStorage.putPropertyAsync(getActivity(), SHOPPING_LIST_CACHE_ITEM, new ShoppingListHolder(shoppingList));
     }
 
     public void addToShoppingList() {
@@ -112,6 +135,6 @@ public class ShoppingListFragment extends Fragment {
         shoppingListAdapter.add(item);
         addToListText.setText("");
 
-        KeyValueStorage.putPropertyAsync(getActivity(), SHOPPING_LIST, new ShoppingListHolder(shoppingList));
+        KeyValueStorage.putPropertyAsync(getActivity(), SHOPPING_LIST_CACHE_ITEM, new ShoppingListHolder(shoppingList));
     }
 }

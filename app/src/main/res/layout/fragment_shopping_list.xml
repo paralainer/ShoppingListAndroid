@@ -29,13 +29,13 @@
             android:layout_marginEnd="@dimen/add_to_list_panel_height"
             android:inputType="text"
             android:imeOptions="actionDone"/>
-        <ImageButton
+        <Button
             android:layout_width="@dimen/add_to_list_panel_height"
             android:layout_height="match_parent"
             android:id="@+id/addToListButton"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@android:drawable/ic_input_add"
+            android:text="@string/icon_plane_o"
             android:contentDescription="@string/add_to_shopping_list"
             android:background="@android:color/transparent" />
 

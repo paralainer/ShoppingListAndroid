@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.paralainer.shoppinglist.R;
 import com.paralainer.shoppinglist.ShoppingItem;
+import com.paralainer.shoppinglist.util.FontHelper;
 
 import java.util.List;
 
@@ -35,35 +37,42 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingItem> {
         if (convertView == null){
             LayoutInflater layoutInflater = ((Activity) getContext()).getLayoutInflater();
             convertView = layoutInflater.inflate(resource, parent, false);
-            ImageButton button = (ImageButton)convertView.findViewById(R.id.shoppingListItemDelete);
-            final View itemView = convertView;
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onDeleteItemClick(position, itemView);
-                }
-            });
+            FontHelper.setFontAwesome((Button) convertView.findViewById(R.id.shoppingListItemBought), getContext());
         }
 
-        TextView labelView = (TextView) convertView.findViewById(R.id.shoppingListItem);
-
         ShoppingItem item = getItem(position);
+
+        TextView labelView = (TextView) convertView.findViewById(R.id.shoppingListItem);
         labelView.setText(item.getName());
-        applyTextAppearance(labelView, item);
+        applyRowAppearance(labelView, item, convertView);
 
         return convertView;
     }
 
-    public void onDeleteItemClick(int position, View itemView) {
-    }
-
-    private void applyTextAppearance(TextView labelView, ShoppingItem item) {
+    private void applyRowAppearance(TextView labelView, final ShoppingItem item, View parentView) {
+        final Button boughtButton = (Button)parentView.findViewById(R.id.shoppingListItemBought);
         if (item.isBought()){
             labelView.setTextColor(Color.LTGRAY);
             labelView.setPaintFlags(labelView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            boughtButton.setText(getContext().getString(R.string.icon_revert));
         } else {
             labelView.setTextColor(Color.BLACK);
             labelView.setPaintFlags(labelView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            boughtButton.setText(getContext().getString(R.string.icon_check));
         }
+
+        boughtButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                item.setBought(!item.isBought());
+                notifyDataSetChanged();
+            }
+        });
+
+
+
+       /* Bitmap mBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rice);
+        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), 30);
+        parentView.setBackground(new BitmapDrawable(getContext().getResources(), mBitmap));*/
     }
 }
