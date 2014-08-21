@@ -390,8 +390,6 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                lp.height = (Integer) valueAnimator.getAnimatedValue();
-                dismissView.setLayoutParams(lp);
             }
         });
 

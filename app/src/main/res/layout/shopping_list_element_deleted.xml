@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#3bd3d3d3">
+
+
+    <TextView
+        android:id="@+id/shoppingListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/list_item_margin"
+        android:layout_marginStart="@dimen/list_item_margin"
+        android:layout_marginBottom="@dimen/list_item_margin"
+        android:layout_marginTop="@dimen/list_item_margin"
+        android:text="@string/shopping_list_item_deleted"
+        android:textColor="#ff989898"
+        style="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+    <LinearLayout
+        android:id="@+id/shoppingListItemRestore"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/list_item_margin"
+        android:layout_marginEnd="@dimen/list_item_margin"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rounded_bg"
+        android:padding="6dp"
+        android:clickable="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:id="@+id/shoppingListItemRestoreIcon"
+            android:text="@string/icon_cancel"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/cancel"
+            style="@android:style/TextAppearance.DeviceDefault.Small"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

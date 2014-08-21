@@ -1,5 +1,6 @@
 package com.paralainer.shoppinglist;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.paralainer.shoppinglist.listadapter.ShoppingListAdapter;
@@ -21,6 +23,8 @@ import com.paralainer.shoppinglist.util.KeyValueStorage;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by paralainer on 20.08.2014.
@@ -49,7 +53,17 @@ public class ShoppingListFragment extends Fragment {
 
         initListAdapter(rootView);
 
+        startRemoveTimers();
+
         return rootView;
+    }
+
+    private void startRemoveTimers() {
+        for (ShoppingItem shoppingItem : shoppingList) {
+            if (shoppingItem.isDeleted()) {
+                startRemoveTimer(shoppingItem);
+            }
+        }
     }
 
     private void initAddToListButton(View rootView) {
@@ -78,7 +92,7 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void initListAdapter(final View rootView) {
-        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), R.layout.shopping_list_element, shoppingList);
+        shoppingListAdapter = new ShoppingListAdapter(rootView.getContext(), shoppingList);
         ListView shoppingListView = (ListView) rootView.findViewById(R.id.shoppingListView);
         shoppingListView.setAdapter(shoppingListAdapter);
         SwipeDismissListViewTouchListener touchListener =
@@ -93,14 +107,42 @@ public class ShoppingListFragment extends Fragment {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    removeFromShoppingList(shoppingListAdapter.getItem(position));
+                                    final ShoppingItem item = shoppingListAdapter.getItem(position);
+                                    if (item.isDeleted()){
+                                        //if user swipes already deleted element
+                                        removeFromShoppingList(item);
+                                    } else {
+                                        item.setDeleted(true);
+                                        startRemoveTimer(item);
+                                    }
                                 }
+                                shoppingListAdapter.notifyDataSetChanged();
                             }
                         });
         shoppingListView.setOnTouchListener(touchListener);
         // Setting this scroll listener is required to ensure that during ListView scrolling,
         // we don't look for swipes.
         shoppingListView.setOnScrollListener(touchListener.makeScrollListener());
+    }
+
+    private void startRemoveTimer(final ShoppingItem item) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Activity activity = getActivity();
+                if (activity == null){
+                    return;
+                }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (item.isDeleted()) {
+                            removeFromShoppingList(item);
+                        }
+                    }
+                });
+            }
+        }, 3000);
     }
 
     private void restoreShoppingList() {
