@@ -44,6 +44,7 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingItem> {
 
         if (!item.isDeleted()){
             TextView labelView = (TextView) convertView.findViewById(R.id.shoppingListItem);
+            labelView.setText(item.getName());
             applyRowAppearance(labelView, item, convertView);
         }
 
@@ -54,9 +55,6 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingItem> {
         LayoutInflater layoutInflater = ((Activity) getContext()).getLayoutInflater();
         View convertView = layoutInflater.inflate(R.layout.shopping_list_element, parent, false);
         FontHelper.setFontAwesome((Button) convertView.findViewById(R.id.shoppingListItemBought), getContext());
-
-        TextView labelView = (TextView) convertView.findViewById(R.id.shoppingListItem);
-        labelView.setText(item.getName());
         convertView.setTag(new ShoppingItemTag(false));
         return convertView;
     }
