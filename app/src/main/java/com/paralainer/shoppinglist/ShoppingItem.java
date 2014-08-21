@@ -12,8 +12,6 @@ public class ShoppingItem {
 
     private boolean deleted;
 
-    private volatile boolean modified = true;
-
     public String getName() {
         return name;
     }
@@ -47,19 +45,10 @@ public class ShoppingItem {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        this.modified = true;
     }
 
     @Override
     public int hashCode() {
         return name.hashCode();
-    }
-
-    public boolean isModified() {
-        return modified;
-    }
-
-    public void setModified(boolean modified) {
-        this.modified = modified;
     }
 }

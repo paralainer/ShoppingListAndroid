@@ -35,7 +35,6 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingItem> {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ShoppingItem item = getItem(position);
         if (convertView == null || ((ShoppingItemTag) convertView.getTag()).deleted != item.isDeleted()) {
-            item.setModified(false);
             if (item.isDeleted()) {
                 convertView = applyDeletedLayout(parent, item);
             } else {
