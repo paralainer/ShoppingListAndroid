@@ -1,6 +1,5 @@
 package com.paralainer.shoppinglist.util;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.widget.TextView;
 

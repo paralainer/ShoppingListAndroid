@@ -1,6 +1,5 @@
 package com.paralainer.shoppinglist.service;
 
-import android.os.Handler;
 import android.util.Log;
 
 import com.paralainer.shoppinglist.model.Product;

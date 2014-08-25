@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.paralainer.shoppinglist.model.Product;
 import com.paralainer.shoppinglist.R;
+import com.paralainer.shoppinglist.model.Product;
 import com.paralainer.shoppinglist.service.ShoppingListService;
 import com.paralainer.shoppinglist.util.FontHelper;
 

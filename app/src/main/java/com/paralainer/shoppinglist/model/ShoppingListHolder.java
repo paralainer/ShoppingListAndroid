@@ -1,7 +1,5 @@
 package com.paralainer.shoppinglist.model;
 
-import com.paralainer.shoppinglist.model.Product;
-
 import java.util.ArrayList;
 
 /**
