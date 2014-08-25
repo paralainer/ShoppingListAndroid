@@ -1,0 +1,47 @@
+{
+    version: "1",
+    products: [
+        {
+            name: "рис",
+            defaultQuantity: "1",
+            defaultMeasure: "кг",
+            group: "крупы"
+        },
+        {
+            name: "пиво",
+            defaultQuantity: "2",
+            defaultMeasure: "бут",
+            group: "крупы"
+        },
+        {
+            name: "сыр",
+            defaultQuantity: "300",
+            defaultMeasure: "гр",
+            group: "сыры"
+        },
+        {
+            name: "молоко",
+            defaultQuantity: "1",
+            defaultMeasure: "л",
+            group: "молочная продукция"
+        },
+        {
+            name: "йогурт",
+            defaultQuantity: "4",
+            defaultMeasure: "шт",
+            group: "молочная продукция"
+        },
+        {
+            name: "чипсы",
+            defaultQuantity: "1",
+            defaultMeasure: "уп",
+            group: "чипсы"
+        },
+        {
+            name: "соль",
+            defaultQuantity: "1",
+            defaultMeasure: "кг",
+            group: "специи"
+        }
+    ]
+}

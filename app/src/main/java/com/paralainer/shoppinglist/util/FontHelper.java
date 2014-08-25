@@ -1,12 +1,10 @@
 package com.paralainer.shoppinglist.util;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.paralainer.shoppinglist.R;
+import com.paralainer.shoppinglist.ShoppingListApplication;
 
 /**
  * Created by paralainer on 21.08.2014.
@@ -14,10 +12,13 @@ import com.paralainer.shoppinglist.R;
  */
 public class FontHelper {
 
-    public static void setFontAwesome(TextView textView, Context context){
-        textView.setTypeface(
-                Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf")
-        );
+    private static Typeface awesomeTypeface;
+
+    public static void setFontAwesome(TextView textView){
+        if (awesomeTypeface == null) {
+            awesomeTypeface = Typeface.createFromAsset(ShoppingListApplication.getAppContext().getAssets(), "fontawesome-webfont.ttf");
+        }
+        textView.setTypeface(awesomeTypeface);
     }
 
 }

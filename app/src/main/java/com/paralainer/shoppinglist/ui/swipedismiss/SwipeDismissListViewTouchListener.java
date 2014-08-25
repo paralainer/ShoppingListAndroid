@@ -1,4 +1,4 @@
-package com.paralainer.shoppinglist.swipedismiss;
+package com.paralainer.shoppinglist.ui.swipedismiss;
 
 /*
  * Copyright 2013 Google Inc.

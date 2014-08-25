@@ -6,9 +6,9 @@
 
 
     <ListView
+        android:id="@+id/shoppingListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/shoppingListView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/add_to_list_panel_height" />
@@ -18,25 +18,43 @@
         android:layout_height="@dimen/add_to_list_panel_height"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#ffffffff">
+        android:focusable="false">
+
+        <AutoCompleteTextView
+            android:id="@+id/addToListText"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="actionDone"
+            android:layout_toLeftOf="@+id/addToListQuantity"
+            android:layout_toStartOf="@+id/addToListQuantity"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:inputType="textAutoComplete" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/addToListQuantity"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/addToListText"
-            android:layout_marginRight="@dimen/add_to_list_panel_height"
-            android:layout_marginEnd="@dimen/add_to_list_panel_height"
-            android:inputType="text"
-            android:imeOptions="actionDone"/>
+            android:layout_toLeftOf="@+id/addToListMeasure"
+            android:layout_toStartOf="@+id/addToListMeasure"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal" />
+        <AutoCompleteTextView
+            android:id="@+id/addToListMeasure"
+            android:layout_width="wrap_content"
+            android:minWidth="60dp"
+            android:layout_toLeftOf="@+id/addToListButton"
+            android:layout_toStartOf="@+id/addToListButton"
+            android:layout_height="match_parent" />
         <Button
+            android:id="@+id/addToListButton"
             android:layout_width="@dimen/add_to_list_panel_height"
             android:layout_height="match_parent"
-            android:id="@+id/addToListButton"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/icon_plane_o"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/add_to_shopping_list"
-            android:background="@android:color/transparent" />
+            android:text="@string/icon_plane_o" />
 
     </RelativeLayout>
 
