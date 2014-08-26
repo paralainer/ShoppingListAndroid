@@ -22,6 +22,7 @@ public class ShoppingListService {
     private ShoppingListHolder shoppingListHolder = new ShoppingListHolder();
 
     private List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
+    private Product currentProduct;
 
     protected ShoppingListService() {
         reload();
@@ -123,5 +124,45 @@ public class ShoppingListService {
         }
     }
 
+    public void setCurrentProduct(Product currentProduct){
+        this.currentProduct = currentProduct;
+    }
 
+    public void setCurrentProduct(int position){
+        this.currentProduct = shoppingListHolder.getShoppingList().get(position);
+    }
+
+    public Product getCurrentProduct() {
+        return currentProduct;
+    }
+
+    public Product nextProduct(){
+        if (currentProduct == null){
+            return null;
+        }
+        ArrayList<Product> shoppingList = shoppingListHolder.getShoppingList();
+        int index = shoppingList.indexOf(currentProduct);
+        index++;
+        if (index >= shoppingList.size()){
+            return null;
+        }
+
+        currentProduct = shoppingList.get(index);
+        return currentProduct;
+    }
+
+    public Product previousProduct(){
+        if (currentProduct == null){
+            return null;
+        }
+        ArrayList<Product> shoppingList = shoppingListHolder.getShoppingList();
+        int index = shoppingList.indexOf(currentProduct);
+        index--;
+        if (index < 0){
+            return null;
+        }
+
+        currentProduct =  shoppingList.get(index);
+        return currentProduct;
+    }
 }

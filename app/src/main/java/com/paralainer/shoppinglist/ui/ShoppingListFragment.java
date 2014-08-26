@@ -183,6 +183,19 @@ public class ShoppingListFragment extends Fragment {
         SwipeDismissListViewTouchListener touchListener = getSwipeDismissListViewTouchListener(shoppingListAdapter, shoppingListView);
         shoppingListView.setOnTouchListener(touchListener);
         shoppingListView.setOnScrollListener(touchListener.makeScrollListener());
+        /*shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                shoppingListService.setCurrentProduct(position);
+                getActivity().getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.shoppingListFragment,
+                                ProductDetailFragment.newInstance()
+                        )
+                        .addToBackStack("detail")
+                        .commit();
+            }
+        });*/
     }
 
     private SwipeDismissListViewTouchListener getSwipeDismissListViewTouchListener(final ShoppingListAdapter shoppingListAdapter, ListView shoppingListView) {
