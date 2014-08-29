@@ -44,10 +44,11 @@
         <AutoCompleteTextView
             android:id="@+id/addToListMeasure"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:minWidth="60dp"
             android:layout_toLeftOf="@+id/addToListButton"
             android:layout_toStartOf="@+id/addToListButton"
-            android:layout_height="match_parent" />
+            android:imeOptions="actionDone" />
         <Button
             android:id="@+id/addToListButton"
             android:layout_width="@dimen/add_to_list_panel_height"

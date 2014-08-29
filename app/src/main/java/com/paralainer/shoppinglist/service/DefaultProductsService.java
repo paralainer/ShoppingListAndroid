@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +42,23 @@ public class DefaultProductsService {
     }
 
     public void reload() {
+        InputStream stream;
         try {
-            InputStream stream = ShoppingListApplication.getAppContext().getAssets().open("default_products.json");
-            productList = new Gson().fromJson(new InputStreamReader(stream), DefaultProductList.class);
-            shoppingItemMap = new HashMap<String, DefaultProduct>();
-            productNames = new ArrayList<String>(productList.getProducts().size());
-            for (DefaultProduct product : productList.getProducts()) {
-                shoppingItemMap.put(product.getName(), product);
-                productNames.add(product.getName());
-
-                MeasureService.regMeasure(product.getDefaultMeasure());
-            }
+            stream = ShoppingListApplication.getAppContext().getAssets().open("default_products.json");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        productList = new Gson().fromJson(new InputStreamReader(stream), DefaultProductList.class);
+        shoppingItemMap = new HashMap<String, DefaultProduct>();
+        productNames = new ArrayList<String>(productList.getProducts().size());
+        for (DefaultProduct product : productList.getProducts()) {
+            shoppingItemMap.put(product.getName(), product);
+            productNames.add(product.getName());
+
+            MeasureService.regMeasure(product.getDefaultMeasure());
+        }
+
+        Collections.sort(productNames);
     }
 
     public List<DefaultProduct> getProducts() {

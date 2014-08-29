@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -148,6 +149,7 @@ public class ShoppingListFragment extends Fragment {
         measureEditor.setThreshold(0);
         measureEditor.setOnEditorActionListener(editorActionListener);
         measureEditor.setSelectAllOnFocus(true);
+        measureEditor.setInputType(~(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT));
     }
 
     private TextView.OnEditorActionListener getOnEditorActionListener() {
@@ -166,8 +168,6 @@ public class ShoppingListFragment extends Fragment {
     private void setDefaultShoppingItemParams() {
         DefaultProduct params = defaultProductsService.getDefaultShoppingItemParams(productNameEditor.getText().toString());
         if (params == null) {
-            quantityEditor.setText(null);
-            measureEditor.setText("");
             return;
         }
         Float defaultQuantity = params.getDefaultQuantity();
