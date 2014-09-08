@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import java.util.List;
 public class ShoppingListAdapter extends ArrayAdapter<Product> implements ShoppingListService.ChangeListener{
 
     private ShoppingListService shoppingListService = ShoppingListService.getInstance();
+
+    private Handler handler = new Handler();
 
     public ShoppingListAdapter(Context context, List<Product> objects) {
         super(context, R.layout.shopping_list_element, objects);
@@ -54,11 +57,18 @@ public class ShoppingListAdapter extends ArrayAdapter<Product> implements Shoppi
                     }
                 }
             });
+            final Button deleteButton = (Button) convertView.findViewById(R.id.shoppingListItemDelete);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    shoppingListService.markDeleted(item);
+                }
+            });
 
             final TextView labelView = (TextView) convertView.findViewById(R.id.shoppingListItem);
             labelView.setText(item.toString());
 
-            applyRowStyle(labelView, boughtButton, item);
+            applyRowStyle(labelView, boughtButton, deleteButton, item);
         }
     }
 
@@ -76,6 +86,7 @@ public class ShoppingListAdapter extends ArrayAdapter<Product> implements Shoppi
     private View applyNormalLayout(ViewGroup parent, Product item) {
         LayoutInflater layoutInflater = ((Activity) getContext()).getLayoutInflater();
         View convertView = layoutInflater.inflate(R.layout.shopping_list_element, parent, false);
+        FontHelper.setFontAwesome((Button) convertView.findViewById(R.id.shoppingListItemDelete));
         FontHelper.setFontAwesome((Button) convertView.findViewById(R.id.shoppingListItemBought));
         convertView.setTag(new ShoppingItemTag(false));
         return convertView;
@@ -95,26 +106,28 @@ public class ShoppingListAdapter extends ArrayAdapter<Product> implements Shoppi
         return convertView;
     }
 
-    private void applyRowStyle(TextView labelView, Button boughtButton, final Product product) {
-
+    private void applyRowStyle(TextView labelView, Button boughtButton, Button deleteButton, final Product product) {
         if (product.isBought()) {
             labelView.setTextColor(Color.LTGRAY);
             labelView.setPaintFlags(labelView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             boughtButton.setText(getContext().getString(R.string.icon_revert));
+            deleteButton.setVisibility(View.VISIBLE);
         } else {
             labelView.setTextColor(Color.BLACK);
             labelView.setPaintFlags(labelView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            deleteButton.setVisibility(View.INVISIBLE);
             boughtButton.setText(getContext().getString(R.string.icon_check));
         }
-
-       /* Bitmap mBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.rice);
-        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), 30);
-        parentView.setBackground(new BitmapDrawable(getContext().getResources(), mBitmap));*/
     }
 
     @Override
     public void onShoppingListChanged() {
-        notifyDataSetChanged();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     static class ShoppingItemTag {

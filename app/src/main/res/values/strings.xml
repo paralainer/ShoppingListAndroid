@@ -2,6 +2,7 @@
 <resources>
 
     <string name="icon_check"></string>
+    <string name="icon_trash">&#xf1f8;</string>
     <string name="icon_revert"></string>
     <string name="icon_plane_o"></string>
     <string name="icon_cancel"></string>

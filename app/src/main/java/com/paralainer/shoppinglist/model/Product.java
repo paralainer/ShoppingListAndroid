@@ -20,6 +20,8 @@ public class Product {
 
     private boolean deleted;
 
+    private long deletedTimestamp;
+
     public String getName() {
         return name;
     }
@@ -42,6 +44,9 @@ public class Product {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+        if (deleted){
+            this.deletedTimestamp = System.currentTimeMillis();
+        }
     }
 
     public String getGroup() {
@@ -66,6 +71,10 @@ public class Product {
 
     public void setMeasure(String measure) {
         this.measure = measure;
+    }
+
+    public long getDeletedTimestamp() {
+        return deletedTimestamp;
     }
 
     @Override

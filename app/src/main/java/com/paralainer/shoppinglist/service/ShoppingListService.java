@@ -2,12 +2,16 @@ package com.paralainer.shoppinglist.service;
 
 import android.util.Log;
 
+import com.paralainer.shoppinglist.ShoppingListApplication;
 import com.paralainer.shoppinglist.model.Product;
 import com.paralainer.shoppinglist.model.ShoppingListHolder;
 import com.paralainer.shoppinglist.util.KeyValueStorage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by paralainer on 25.08.2014.
@@ -32,6 +36,27 @@ public class ShoppingListService {
                 save();
             }
         });
+        startRemoveTimer();
+    }
+
+    private void startRemoveTimer(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                boolean listChanged = false;
+                for (Iterator<Product> iterator = getShoppingList().iterator(); iterator.hasNext(); ) {
+                    Product product = iterator.next();
+                    if (product.isDeleted() && System.currentTimeMillis() - product.getDeletedTimestamp() > 3000){
+                        iterator.remove();
+                        listChanged = true;
+                    }
+                }
+                if (listChanged){
+                    notifyListChanged();
+                }
+            }
+        }, 2000, 1000);
     }
 
     public static ShoppingListService getInstance() {

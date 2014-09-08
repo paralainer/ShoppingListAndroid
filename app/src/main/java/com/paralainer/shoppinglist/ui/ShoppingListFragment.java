@@ -41,8 +41,6 @@ import java.util.Collections;
  */
 public class ShoppingListFragment extends Fragment {
 
-    private Handler handler = new Handler();
-
     private AutoCompleteTextView productNameEditor;
     private EditText quantityEditor;
     private AutoCompleteTextView measureEditor;
@@ -62,17 +60,8 @@ public class ShoppingListFragment extends Fragment {
         initAddToListButton(rootView);
         initAddToListEditors(rootView);
         initListAdapter(rootView);
-        startRemoveTimers();
 
         return rootView;
-    }
-
-    private void startRemoveTimers() {
-        for (Product product : shoppingListService.getShoppingList()) {
-            if (product.isDeleted()) {
-                startRemoveTimer(product);
-            }
-        }
     }
 
     private void initAddToListButton(View rootView) {
@@ -119,6 +108,13 @@ public class ShoppingListFragment extends Fragment {
         productNameEditor.addTextChangedListener(new DefaultTextWatcher() {
             @Override
             public void afterTextChanged(Editable editable) {
+                if (productNameEditor.getText().length() > 0){
+                    quantityEditor.setVisibility(View.VISIBLE);
+                    measureEditor.setVisibility(View.VISIBLE);
+                } else {
+                    quantityEditor.setVisibility(View.GONE);
+                    measureEditor.setVisibility(View.GONE);
+                }
                 setDefaultShoppingItemParams();
             }
         });
@@ -217,7 +213,6 @@ public class ShoppingListFragment extends Fragment {
                                     shoppingListService.remove(item);
                                 } else {
                                     shoppingListService.markDeleted(item);
-                                    startRemoveTimer(item);
                                 }
                             } catch (Exception e) {
                                 Log.w("Can't delete shopping list item", e);
@@ -225,17 +220,6 @@ public class ShoppingListFragment extends Fragment {
                         }
                     }
                 });
-    }
-
-    private void startRemoveTimer(final Product item) {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (item.isDeleted()) {
-                    shoppingListService.remove(item);
-                }
-            }
-        }, 3000);
     }
 
     private void addToShoppingList() {

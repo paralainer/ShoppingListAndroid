@@ -4,8 +4,35 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/shoppingListItem"
+        android:layout_toLeftOf="@+id/shoppingListItemDelete"
+        android:layout_toStartOf="@+id/shoppingListItemDelete"
+        android:layout_margin="@dimen/list_item_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:focusable="false"
+        android:layout_alignParentTop="true" />
+
+
+
     <Button
-        android:layout_width="@dimen/add_to_list_panel_height"
+        android:layout_width="@dimen/add_button_width"
+        android:layout_height="match_parent"
+        android:id="@+id/shoppingListItemDelete"
+        style="?android:attr/buttonStyleSmall"
+        android:text="@string/icon_trash"
+        android:focusable="false"
+        android:layout_toLeftOf="@+id/shoppingListItemBought"
+        android:layout_toStartOf="@+id/shoppingListItemBought"
+        android:background="@android:color/transparent"
+        />
+
+    <Button
+        android:layout_width="@dimen/add_button_width"
         android:layout_height="match_parent"
         android:id="@+id/shoppingListItemBought"
         android:layout_alignParentRight="true"
@@ -15,20 +42,5 @@
         android:focusable="false"
         android:background="@android:color/transparent"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/shoppingListItem"
-        android:layout_marginRight="@dimen/add_to_list_panel_height"
-        android:layout_marginEnd="@dimen/add_to_list_panel_height"
-        android:layout_marginLeft="@dimen/list_item_margin"
-        android:layout_marginStart="@dimen/list_item_margin"
-        android:layout_marginTop="@dimen/list_item_margin"
-        android:layout_marginBottom="@dimen/list_item_margin"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:focusable="false"
-        android:layout_alignParentTop="true" />
 
 </RelativeLayout>
